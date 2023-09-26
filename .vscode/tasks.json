@@ -1,0 +1,56 @@
+{
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "Build program debug",
+            "command": "C:\\MinGW\\bin\\g++.exe",
+            "args": [
+                "${workspaceFolder}\\main.cpp",
+                "-fdiagnostics-color=always",
+                "-g",
+                "-Wall",
+                "-Werror",
+                "-DDEBUG",
+                "-o",
+                "${workspaceFolder}\\allocators.exe"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group":
+            {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Build the program in debug mode. main.cpp must be in the workspace root."
+        },
+        {
+            "type": "cppbuild",
+            "label": "Build program release",
+            "command": "C:\\MinGW\\bin\\g++.exe",
+            "args": [
+                "${workspaceFolder}\\main.cpp",
+                "-fdiagnostics-color=always",
+                "-g",
+                "-O1",
+                "-Wall",
+                "-Werror",
+                "-DRELEASE",
+                "-o",
+                "${workspaceFolder}\\allocators.exe"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build",
+            "detail": "Build the program in release mode. main.cpp must be in the workspace root."
+        }
+    ],
+    "version": "2.0.0"
+}

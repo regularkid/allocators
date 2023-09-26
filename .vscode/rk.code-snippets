@@ -1,0 +1,10 @@
+{
+	"rk comment line": {
+		"scope": "cpp,C,c_cpp",
+		"prefix": "rk",
+		"body": [
+			"// -----------------------------------------------------------------------------"
+		],
+		"description": "rk style comment line / separator"
+	}
+}
