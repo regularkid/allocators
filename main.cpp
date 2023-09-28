@@ -59,7 +59,10 @@ public:
 
     static void shutdown()
     {
-        delete m_base;
+        if (m_base)
+        {
+            free(m_base);
+        }
         m_base = nullptr;
         m_cur = nullptr;
     }
@@ -85,11 +88,6 @@ public:
         char* newPtr = m_cur;   // Save off this position as the allocation location to return
         m_cur += numBytes;      // Advance internal position by the number of allocated bytes
         return newPtr;
-    }
-
-    static void* allocate(const size_t numBytes)
-    {
-        return allocate(numBytes, 8);   // Default to 8 byte alignment
     }
 
     template <class T>
@@ -118,12 +116,12 @@ class thing
 public:
     void* operator new(size_t numBytes)
     {
-        return scratchAllocator::allocate(numBytes);
+        return scratchAllocator::allocate(numBytes, alignof(thing));
     }
 
     void operator delete(void* ptr)
     {
-        //allocator::deallocate(ptr);
+        // Can't deallocate from scratch allocator
     }
 
 public:
@@ -177,6 +175,8 @@ int main()
 
     *c2 = 5;
     printf("c2 : %d\n", *c2);
+
+    scratchAllocator::shutdown();
 
     return 0;
 }
