@@ -78,15 +78,15 @@ public:
         init();
 
         // Calculate next available location that has correct alignment
-        size_t curPos = (size_t)m_cur;  // Cast to size_t so we can do bit manipulation without compiler complaining
+        size_t curPos = (size_t)m_cur;              // Cast to size_t so we can do bit manipulation without compiler complaining
         size_t newPos = curPos & ~(alignment - 1);  // Clear low bits to get an aligned position (alignment - 1 = lower bits that should be 0's for proper alignment get set, then ~ inverts and we & against curPos = aligned pos)
-        if (newPos < curPos)    // If newly aligned position is *before* cur pos, then we need to advance to the next aligned location
+        if (newPos < curPos)                        // If newly aligned position is *before* cur pos, then we need to advance to the next aligned location
         {
             newPos += alignment;
         }
-        m_cur = (char*)newPos;  // Cast back newly aligned position from integer
-        char* newPtr = m_cur;   // Save off this position as the allocation location to return
-        m_cur += numBytes;      // Advance internal position by the number of allocated bytes
+        m_cur = (char*)newPos;                      // Cast back newly aligned position from integer
+        char* newPtr = m_cur;                       // Save off this position as the allocation location to return
+        m_cur += numBytes;                          // Advance internal position by the number of allocated bytes
         return newPtr;
     }
 
