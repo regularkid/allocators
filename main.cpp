@@ -66,13 +66,33 @@ public:
 
     static void* allocate(const size_t numBytes)
     {
+        if (numBytes == 0)
+        {
+            return nullptr;
+        }
+
         printf("scratchAllocator::allocate\n");
         init();
 
-        const size_t alignment = 8; // Temp - just always use 8 byte alignment
+        size_t alignment = 8;
+        switch (numBytes)
+        {
+            case 1: alignment = 1; break;
+            case 2: alignment = 2; break;
+            case 3: alignment = 4; break;
+            case 4: alignment = 4; break;
+            default: alignment = 8;
+        }
 
+        size_t curPos = (size_t)m_cur;
+        size_t newPos = curPos & ~(alignment - 1);
+        if (newPos < curPos)
+        {
+            newPos += alignment;
+        }
+        m_cur = (char*)newPos;
         char* newPtr = m_cur;
-        m_cur += (numBytes + alignment) & ~0x7;
+        m_cur += numBytes;
         return newPtr;
     }
 
@@ -112,11 +132,11 @@ int main()
     char* c = (char*)scratchAllocator::allocate(sizeof(char));
     printf("c : 0x%p\n", (void*)c);
 
+    int* i = (int*)scratchAllocator::allocate(sizeof(int));
+    printf("i : 0x%p\n", (void*)i);
+
     short* s = (short*)scratchAllocator::allocate(sizeof(short));
     printf("s : 0x%p\n", (void*)s);
-
-    int* i = (int*)scratchAllocator::allocate(sizeof(int));
-    printf("s : 0x%p\n", (void*)i);
 
     long long* l = (long long*)scratchAllocator::allocate(sizeof(long long));
     printf("l : 0x%p\n", (void*)l);
