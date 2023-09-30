@@ -21,12 +21,12 @@ void TestScratchAllocator()
     // Deallocate class type (verify destructor called)
     ScratchAllocator::Deallocate<Thing>(t);
 
-    // Reset and allocate again
+    // Reset and allocate again (verify address used is back at beginning of allocator buffer)
     ScratchAllocator::Reset();
     char* c2 = ScratchAllocator::Allocate<char>();
     *c2 = 5; printf("c2 : %d\n", *c2);
 
-    // Test out of memory erro
+    // Test out of memory error
     void* big = ScratchAllocator::Allocate(1048574, alignof(char)); (void)big;
     void* oom = ScratchAllocator::Allocate(2, alignof(char)); (void)oom;
 
