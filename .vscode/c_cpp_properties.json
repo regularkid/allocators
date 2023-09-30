@@ -1,0 +1,15 @@
+{
+  "configurations": [
+    {
+      "name": "Jumbo Build Debug",
+      "defines": ["DEBUG"],
+      "forcedInclude": ["${workspaceFolder}\\jumboIncludes.h"]
+    },
+    {
+      "name": "Jumbo Build Release",
+      "defines": ["RELEASE"],
+      "forcedInclude": ["${workspaceFolder}\\jumboIncludes.h"]
+    }
+  ],
+  "version": 4
+}
