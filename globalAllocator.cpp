@@ -1,4 +1,5 @@
 // Testing out overriding global new/delete. Prints verify that these aren't called when using custom allocators.
+// Using malloc / free actually breaks things since it doesn't call the constructor/destructor.
 
 // -----------------------------------------------------------------------------
 void* operator new(size_t numBytes)
