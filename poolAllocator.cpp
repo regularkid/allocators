@@ -11,6 +11,8 @@ public:
         m_numChunks = numChunks;
         m_freeChunks = numChunks;
         m_base = malloc(chunkSize * numChunks);
+        m_free = m_base;
+        printf("PoolAllocator::Init baseAddress[0x%p]\n", m_base);
 
         Chunk* chunk = static_cast<Chunk*>(m_base);
         for (size_t i = 0; i < numChunks; ++i)
@@ -22,6 +24,7 @@ public:
 
     static void Kill()
     {
+        printf("PoolAllocator::Kill\n");
         free(m_base);
         m_base = nullptr;
         m_free = nullptr;
@@ -36,21 +39,30 @@ public:
             return nullptr;
         }
 
+        if (m_freeChunks == 0)
+        {
+            printf("PoolAllocator::Allocate failed - cannot allocate; out of chunks\n");
+            return nullptr;
+        }
+
         void* ptr = m_free;
         m_free = static_cast<Chunk*>(m_free)->m_next;
         --m_freeChunks;
         T* t = new (ptr) T;
+        printf("PoolAllocator::Allocate address:[0x%p] freeAddress[0x%p] numFreeChunks[%llu]\n", ptr, m_free, m_freeChunks);
         return t;
     }
 
     template <class T>
     static void Deallocate(T* ptr)
     {
-        Chunk* chunk = static_cast<Chunk*>(ptr);
-        chunk->m_next = m_free;
+        Chunk* chunk = reinterpret_cast<Chunk*>(ptr);
+        chunk->m_next = reinterpret_cast<Chunk*>(m_free);
         m_free = chunk;
         ++m_freeChunks;
         ptr->~T();
+
+        printf("PoolAllocator::Deallocate address:[0x%p] freeAddress[0x%p] numFreeChunks[%llu]\n", ptr, m_free, m_freeChunks);
     }
 
 private:
